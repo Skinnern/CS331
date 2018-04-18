@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Arrays;
+import java.util.Hashtable;
 
 /**
  * Created by nicks on 4/6/2018.
@@ -11,29 +12,40 @@ public class ThreeChickensSolver {
         int[] initialInt = new int[6];
         int[] goalInt = new int[6];
 
+        depthFirst df = new depthFirst();
+
         //initial array
         initialInt = ConvertDriver(args[0]);
 
         int i=0;
+        /*
         while(i<initialInt.length) {
+
             System.out.println(initialInt[i]);
             i++;
         }
+        */
 
         //goal array
         goalInt = ConvertDriver(args[1]);
 
         i=0;
+        /*
         while(i<goalInt.length) {
             System.out.println(goalInt[i]);
             i++;
         }
+        */
+
         //read testStart1.txt into java
 
         //read testGoal1.txt into java
 
         //mode setter
-
+        if (args[2].equals("dfs")){
+            //System.out.println("wow");
+            df.depthSolution(initialInt, goalInt);
+        }
         //file output
 
     }
