@@ -45,10 +45,10 @@ public class ThreeChickensSolver {
         //mode setter
         if (args[2].equals("dfs")){
             //System.out.println("wow");
-            dfs.depthSolution(initialInt, goalInt);
+            dfs.depthSolution(initialInt, goalInt, args[3]);
         }
         if (args[2].equals("iddfs")){
-            iddfs.iddfsearchSolution(initialInt, goalInt);
+            iddfs.iddfsearchSolution(initialInt, goalInt, args[3]);
         }
         //file output
 

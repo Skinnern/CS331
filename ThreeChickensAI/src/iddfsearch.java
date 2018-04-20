@@ -20,11 +20,13 @@ public class iddfsearch {
 
     static FileWriter fileWriter;
     static PrintWriter printWriter;
+    public static String output;
 
 
 
-    public static void iddfsearchSolution(int[] InitialImp, int[] GoalImp) {
+    public static void iddfsearchSolution(int[] InitialImp, int[] GoalImp, String outputget) {
         //declare initial state
+        output=outputget;
         if (currdepth == 0){
             Initial = InitialImp;
             Goal = GoalImp;
@@ -48,7 +50,7 @@ public class iddfsearch {
         //node is null if we have no solution
         if (node == null) {
             totalcheck = totalcheck+checkdepth;
-            iddfsearchSolution(Initial, Goal);
+            iddfsearchSolution(Initial, Goal, output);
             //need to find a way to make this not print after sol is found
             //System.out.println("No solution exists.");
         }
@@ -56,7 +58,7 @@ public class iddfsearch {
             //filewrite
 
             try{
-                fileWriter = new FileWriter("output.txt");
+                fileWriter = new FileWriter(output);
                 printWriter = new PrintWriter(fileWriter);
             } catch (IOException e) {
                 System.out.println(e);
