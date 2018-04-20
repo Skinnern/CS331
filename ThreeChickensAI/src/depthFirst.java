@@ -11,11 +11,13 @@ public class depthFirst {
     public static int totalcheck;
     static FileWriter fileWriter;
     static PrintWriter printWriter;
+    public static String output;
 
     //public static BufferedWriter writer;
 
-    public static void depthSolution(int[] Initial, int[] Goal) {
+    public static void depthSolution(int[] Initial, int[] Goal, String outputget) {
         //declare initial state
+        output=outputget;
         State initial_state = new State(Initial[3],Initial[4],'L',Initial[0],Initial[1]);
 
         //bad practice, but declaring global goals of numbers of animals on left shore
@@ -29,7 +31,7 @@ public class depthFirst {
             System.out.println("No solution exists.");
         else {
             try{
-                fileWriter = new FileWriter("output.txt");
+                fileWriter = new FileWriter(output);
                 printWriter = new PrintWriter(fileWriter);
             } catch (IOException e) {
                 System.out.println(e);
