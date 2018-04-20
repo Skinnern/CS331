@@ -56,11 +56,11 @@ public class ThreeChickensSolver {
         }
         else if (args[2].equals("bfs")) {
             result = bfsSearch.solve(initialInt);
-            print(result);
+            print(result, args[3]);
         }
         else if (args[2].equals("astar")) {
             result = astarSearch.solve(initialInt);
-            print(result);
+            print(result, args[3]);
         }
         //file output
 
@@ -126,10 +126,10 @@ public class ThreeChickensSolver {
         return inputInt;
     }
 
-    public static void print(ArrayList<String> result) {
+    public static void print(ArrayList<String> result, String output) {
 
         try{
-            FileWriter fw = new FileWriter("output.txt");
+            FileWriter fw = new FileWriter(output);
             PrintWriter pw = new PrintWriter(fw);
 
             for(String item : result) {
