@@ -7,7 +7,7 @@ import java.util.LinkedList;
  */
 public class bfs {
 
-    public static void solve(int[] startState) {
+    public static ArrayList<String> solve(int[] startState) {
         ArrayList<String> endPath = new ArrayList<>();
         LinkedList<state> queue = new LinkedList<>();
         Hashtable<String, state> table = new Hashtable<>();
@@ -16,7 +16,7 @@ public class bfs {
         //Setup initial state
         if(startState.length != 6) {
             System.out.println("Invalid start state array for BFS solver!");
-            return;
+            return null;
         }
 
         state initial = new state(null, startState[0], startState[1], startState[2], startState[3], startState[4], startState[5],"initial");
@@ -31,7 +31,7 @@ public class bfs {
         while(!queue.isEmpty()) {
             //pop next state
             current = queue.poll();
-            System.out.println("Examining: " + current);
+            //System.out.println("Examining: " + current);
 
             //check if goal state
             if( current.checkDone() ) {
@@ -83,12 +83,22 @@ public class bfs {
             expansions++;
         }
 
+        if(endPath.isEmpty()) {
+            endPath.add("No solution found.");
+        }
+
         //Print results
         System.out.println("---- BFS results ----");
         System.out.println("Final Path: ");
         endPath.forEach(System.out::println); //this might not work on flip servers
-        System.out.println("Expansions: " + expansions);
+        System.out.println("\nExpansions: " + expansions);
         System.out.println("Path length: " + (endPath.size()-1));
+
+        //Add to arraylist
+        endPath.add(0,"Expansions: " + expansions);
+        endPath.add(1,"Path length: " + (endPath.size()-2) + "\n");
+
+        return endPath;
     }
 
     //Determine if state should be added to queue

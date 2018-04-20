@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 
@@ -11,9 +12,12 @@ public class ThreeChickensSolver {
 
         int[] initialInt = new int[6];
         int[] goalInt = new int[6];
+        ArrayList<String> result = new ArrayList<>();
 
         iddfsearch iddfs = new iddfsearch();
         depthFirst dfs = new depthFirst();
+        bfs bfsSearch = new bfs();
+        astar astarSearch = new astar();
 
         //initial array
         initialInt = ConvertDriver(args[0]);
@@ -47,8 +51,16 @@ public class ThreeChickensSolver {
             //System.out.println("wow");
             dfs.depthSolution(initialInt, goalInt);
         }
-        if (args[2].equals("iddfs")){
+        else if (args[2].equals("iddfs")){
             iddfs.iddfsearchSolution(initialInt, goalInt);
+        }
+        else if (args[2].equals("bfs")) {
+            result = bfsSearch.solve(initialInt);
+            print(result);
+        }
+        else if (args[2].equals("astar")) {
+            result = astarSearch.solve(initialInt);
+            print(result);
         }
         //file output
 
@@ -112,5 +124,22 @@ public class ThreeChickensSolver {
         inputInt = turnToInt(inputStr);
 
         return inputInt;
+    }
+
+    public static void print(ArrayList<String> result) {
+
+        try{
+            FileWriter fw = new FileWriter("output.txt");
+            PrintWriter pw = new PrintWriter(fw);
+
+            for(String item : result) {
+                pw.printf(item + "\n");
+            }
+
+            pw.close();
+
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 }

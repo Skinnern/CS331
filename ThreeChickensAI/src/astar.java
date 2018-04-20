@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
  */
 public class astar {
 
-    public static void solve(int[] startState) {
+    public static ArrayList<String> solve(int[] startState) {
         int expansions = 0;
         stateCompare comparator = new stateCompare();
         PriorityQueue prio = new PriorityQueue(10, comparator);
@@ -24,7 +24,7 @@ public class astar {
         //Setup initial state
         if(startState.length != 6) {
             System.out.println("Invalid start state array for A* solver!");
-            return;
+            return null;
         }
 
         state initial = new state(null, startState[0], startState[1], startState[2], startState[3], startState[4], startState[5],"initial");
@@ -50,41 +50,59 @@ public class astar {
             //take actions, if new state is valid, add to priority queue based on heuristic
             //take 1 chicken
             child = current.cross("1c",1,0);
-            if(checkState(child, table))
+            if(checkState(child, table)) {
                 prio.add(child);
+                table.put(child.toString(), child);
+            }
 
             //2 chicken
             child = current.cross("2c",2,0);
-            if(checkState(child, table))
+            if(checkState(child, table)) {
                 prio.add(child);
+                table.put(child.toString(), child);
+            }
 
             //1 wolf
             child = current.cross("1w",0,1);
-            if(checkState(child, table))
+            if(checkState(child, table)) {
                 prio.add(child);
+                table.put(child.toString(), child);
+            }
 
             //1 chicken 1 wolf
             child = current.cross("1c1w",1,1);
-            if(checkState(child, table))
+            if(checkState(child, table)) {
                 prio.add(child);
+                table.put(child.toString(), child);
+            }
 
             //2 wolf
             child = current.cross("2w",0,2);
-            if(checkState(child, table))
+            if(checkState(child, table)) {
                 prio.add(child);
+                table.put(child.toString(), child);
+            }
 
             //add to closed states
             table.put(current.toString(), current);
-            //System.out.println("-------");
 
             expansions++;
         }
 
+        if(endPath.isEmpty())
+            endPath.add("No solution found.");
+
         System.out.println("---- A* results ----");
-        System.out.println("Expansions: " + expansions);
-        System.out.println("Final Path: ");
-        //System.out.println(endPath);
+
         endPath.forEach(System.out::println); //this might not work on flip servers
+        System.out.println("\nExpansions: " + expansions);
+        System.out.println("Path length: " + (endPath.size()-1));
+
+        //Add to arraylist
+        endPath.add(0,"Expansions: " + expansions);
+        endPath.add(1,"Path length: " + (endPath.size()-2) + "\n");
+
+        return endPath;
     }
 
     //Determine if state should be added to priority queue
