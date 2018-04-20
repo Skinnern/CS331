@@ -4,55 +4,77 @@ import java.util.Vector;
 import java.util.LinkedList;
 import java.io.PrintWriter;
 
-public class depthFirst {
+
+public class iddfsearch {
 
     public static int goalChickenLeft;
     public static int goalWolfLeft;
+    public static State initial_state;
+
+    public static int currdepth;
+    public static int checkdepth;
     public static int totalcheck;
+    public static int[] Goal;
+    public static int[] Initial;
+    public static Node node;
+
     static FileWriter fileWriter;
     static PrintWriter printWriter;
 
-    //public static BufferedWriter writer;
 
-    public static void depthSolution(int[] Initial, int[] Goal) {
+
+    public static void iddfsearchSolution(int[] InitialImp, int[] GoalImp) {
         //declare initial state
-        State initial_state = new State(Initial[3],Initial[4],'L',Initial[0],Initial[1]);
+        if (currdepth == 0){
+            Initial = InitialImp;
+            Goal = GoalImp;
+            //System.out.print("wow");
+            currdepth=1;
+            checkdepth=0;
+        } else {
+            checkdepth=0;
+            currdepth = currdepth+5;
+            //System.out.println("wow");
+        }
+
+        initial_state = new State(Initial[3],Initial[4],'L',Initial[0],Initial[1]);
 
         //bad practice, but declaring global goals of numbers of animals on left shore
         goalChickenLeft=Goal[3];
         goalWolfLeft=Goal[4];
-        Node node = solve( initial_state );
-        System.out.println();
+        node = solve( initial_state );
+        //System.out.println();
 
         //node is null if we have no solution
-        if (node == null)
-            System.out.println("No solution exists.");
+        if (node == null) {
+            totalcheck = totalcheck+checkdepth;
+            iddfsearchSolution(Initial, Goal);
+            //need to find a way to make this not print after sol is found
+            //System.out.println("No solution exists.");
+        }
         else {
+            //filewrite
+
             try{
                 fileWriter = new FileWriter("output.txt");
                 printWriter = new PrintWriter(fileWriter);
             } catch (IOException e) {
                 System.out.println(e);
             }
-            printWriter.printf("Total Checks for Depth First: " + totalcheck + "\n");
+            printWriter.printf("Total Checks: " + totalcheck + "\n");
             printWriter.printf("The solution is:\n");
-            /*
-            try{
-                printWriter.printf("Total Checks: " + totalcheck + "\n");
-                printWriter.printf("The solution is:\n");
-                //node.RecurBacktracePrint(fileOP);
 
-            }catch(IOException e){
-            System.out.println(e);
-            }
-            */
+            //end filewrite
+
+
+
+            totalcheck = totalcheck+checkdepth;
             System.out.println("Translated to states, (0, 0, 0, 3, 3, 1) becomes (3, 3, L, 0, 0)\n");
-            System.out.println("Total Checks: " + totalcheck);
+
+            System.out.println("Total Checks for IDDFS: " +totalcheck);
             System.out.println("The solution is:\n");
             node.RecurBacktracePrint(printWriter);
-
             printWriter.close();
-
         }
     }
 
@@ -103,46 +125,53 @@ public class depthFirst {
 
         public Vector successor_function() {
             Vector v = new Vector();
-            //check boat position (left or right)
-            totalcheck=totalcheck+1;
-            if (boat == 'L') {
-                //System.out.println("Left Shore");
-                //actions boat can take if it is on left position
-                testAndAdd(v,new StateActionPair(
-                        new State(ChickenLeft-2,WolfLeft,'R',ChickenRight+2,WolfRight),
-                        new Action("Two chickens cross from the left to the right.")));
-                testAndAdd(v,new StateActionPair(
-                        new State(ChickenLeft,WolfLeft-2,'R',ChickenRight,WolfRight+2),
-                        new Action("Two wolves cross from the left to the right.")));
-                testAndAdd(v,new StateActionPair(
-                        new State(ChickenLeft-1,WolfLeft-1,'R',ChickenRight+1,WolfRight+1),
-                        new Action("One chicken and one wolf cross from the left to the right.")));
-                testAndAdd(v,new StateActionPair(
-                        new State(ChickenLeft-1,WolfLeft,'R',ChickenRight+1,WolfRight),
-                        new Action("One chicken crosses from the left to the right.")));
-                testAndAdd(v,new StateActionPair(
-                        new State(ChickenLeft,WolfLeft-1,'R',ChickenRight,WolfRight+1),
-                        new Action("One wolf crosses from the left to the right.")));
+            //System.out.println("Vector Created");
+            //System.out.println(checkdepth);
+            if (currdepth>=checkdepth) {
+                //check boat position (left or right)
+                if (boat == 'L') {
+                    //System.out.println("Left Shore");
+                    //actions boat can take if it is on left position
+                    testAndAdd(v, new StateActionPair(
+                            new State(ChickenLeft - 2, WolfLeft, 'R', ChickenRight + 2, WolfRight),
+                            new Action("Two chickens cross from the left to the right.")));
+                    testAndAdd(v, new StateActionPair(
+                            new State(ChickenLeft, WolfLeft - 2, 'R', ChickenRight, WolfRight + 2),
+                            new Action("Two wolves cross from the left to the right.")));
+                    testAndAdd(v, new StateActionPair(
+                            new State(ChickenLeft - 1, WolfLeft - 1, 'R', ChickenRight + 1, WolfRight + 1),
+                            new Action("One chicken and one wolf cross from the left to the right.")));
+                    testAndAdd(v, new StateActionPair(
+                            new State(ChickenLeft - 1, WolfLeft, 'R', ChickenRight + 1, WolfRight),
+                            new Action("One chicken crosses from the left to the right.")));
+                    testAndAdd(v, new StateActionPair(
+                            new State(ChickenLeft, WolfLeft - 1, 'R', ChickenRight, WolfRight + 1),
+                            new Action("One wolf crosses from the left to the right.")));
+                } else {
+                    //actions boat can take if it is on right position
+                    //System.out.println("Right Shore");
+                    testAndAdd(v, new StateActionPair(
+                            new State(ChickenLeft + 2, WolfLeft, 'L', ChickenRight - 2, WolfRight),
+                            new Action("Two chickens cross from the right to the left.")));
+                    testAndAdd(v, new StateActionPair(
+                            new State(ChickenLeft, WolfLeft + 2, 'L', ChickenRight, WolfRight - 2),
+                            new Action("Two wolves cross from the right to the left.")));
+                    testAndAdd(v, new StateActionPair(
+                            new State(ChickenLeft + 1, WolfLeft + 1, 'L', ChickenRight - 1, WolfRight - 1),
+                            new Action("One chicken and one wolf cross from the right to the left.")));
+                    testAndAdd(v, new StateActionPair(
+                            new State(ChickenLeft + 1, WolfLeft, 'L', ChickenRight - 1, WolfRight),
+                            new Action("One chicken crosses from the right to the left.")));
+                    testAndAdd(v, new StateActionPair(
+                            new State(ChickenLeft, WolfLeft + 1, 'L', ChickenRight, WolfRight - 1),
+                            new Action("One wolf crosses right to left.")));
+                }
             }
-            else {
-                //actions boat can take if it is on right position
-                //System.out.println("Right Shore");
-                testAndAdd(v,new StateActionPair(
-                        new State(ChickenLeft+2,WolfLeft,'L',ChickenRight-2,WolfRight),
-                        new Action("Two chickens cross from the right to the left.")));
-                testAndAdd(v,new StateActionPair(
-                        new State(ChickenLeft,WolfLeft+2,'L',ChickenRight,WolfRight-2),
-                        new Action("Two wolves cross from the right to the left.")));
-                testAndAdd(v,new StateActionPair(
-                        new State(ChickenLeft+1,WolfLeft+1,'L',ChickenRight-1,WolfRight-1),
-                        new Action("One chicken and one wolf cross from the right to the left.")));
-                testAndAdd(v,new StateActionPair(
-                        new State(ChickenLeft+1,WolfLeft,'L',ChickenRight-1,WolfRight),
-                        new Action("One chicken crosses from the right to the left.")));
-                testAndAdd(v,new StateActionPair(
-                        new State(ChickenLeft,WolfLeft+1,'L',ChickenRight,WolfRight-1),
-                        new Action("One wolf crosses right to left.")));
+            else{
+                //System.out.println("Failed");
+                return v;
             }
+
             return v;
         }
 
@@ -151,8 +180,10 @@ public class depthFirst {
             State state = pair.state;
             //System.out.println("Node" + v);
             //System.out.println("pair" + pair);
-            if (state.ChickenLeft >= 0 && state.ChickenRight >= 0 && state.WolfLeft >= 0 && state.WolfRight >= 0 && (state.ChickenLeft == 0 || state.ChickenLeft >= state.WolfLeft) && (state.ChickenRight == 0 || state.ChickenRight >= state.WolfRight))
+            if (state.ChickenLeft >= 0 && state.ChickenRight >= 0 && state.WolfLeft >= 0 && state.WolfRight >= 0 && (state.ChickenLeft == 0 || state.ChickenLeft >= state.WolfLeft) && (state.ChickenRight == 0 || state.ChickenRight >= state.WolfRight)) {
+                //System.out.print(v.size());
                 v.addElement(pair);
+            }
         }
     }
     //end class State
@@ -224,13 +255,21 @@ public class depthFirst {
             if (solver.isEmpty()){
                 return null;
             }
+
             Node node = (Node)solver.removeFirst();
+
             Vector successors = node.state.successor_function();
+
+
+
+
             for (int i = 0; i < successors.size(); i++) {
+                checkdepth=checkdepth+1;
                 StateActionPair successor = (StateActionPair)successors.elementAt(i);
 
                 //check vector if we've used state before, if not, add it as a new node
                 if ( ! containsState(visited,successor.state) ) {
+
                     Node newNode = new Node(successor.state,node,successor.action);
                     if (successor.state.goal_test()) {
                         return newNode;

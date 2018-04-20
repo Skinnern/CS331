@@ -12,7 +12,8 @@ public class ThreeChickensSolver {
         int[] initialInt = new int[6];
         int[] goalInt = new int[6];
 
-        depthFirst df = new depthFirst();
+        iddfsearch iddfs = new iddfsearch();
+        depthFirst dfs = new depthFirst();
 
         //initial array
         initialInt = ConvertDriver(args[0]);
@@ -44,7 +45,10 @@ public class ThreeChickensSolver {
         //mode setter
         if (args[2].equals("dfs")){
             //System.out.println("wow");
-            df.depthSolution(initialInt, goalInt);
+            dfs.depthSolution(initialInt, goalInt);
+        }
+        if (args[2].equals("iddfs")){
+            iddfs.iddfsearchSolution(initialInt, goalInt);
         }
         //file output
 
