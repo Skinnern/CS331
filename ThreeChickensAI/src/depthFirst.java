@@ -48,11 +48,12 @@ public class depthFirst {
             System.out.println(e);
             }
             */
+
+            System.out.println("The solution is:\n");
+
+            node.RecurBacktracePrint(printWriter);
             System.out.println("Translated to states, (0, 0, 0, 3, 3, 1) becomes (3, 3, L, 0, 0)\n");
             System.out.println("Total Checks: " + totalcheck);
-            System.out.println("The solution is:\n");
-            node.RecurBacktracePrint(printWriter);
-
             printWriter.close();
 
         }

@@ -1,4 +1,4 @@
-Total Checks: 93
+Total Checks for Depth First: 14
 The solution is:
 	0) Initial state (3 3 L 0 0)
 	1) Two wolves cross from the left to the right. (3 1 R 0 2)
